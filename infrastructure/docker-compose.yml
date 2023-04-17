@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: bc-postgres
+    image: postgres
+    networks:
+      - bc-network
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db/postgres:/docker-entrypoint-initdb.d/
+    environment:
+      POSTGRES_USER: bc-user
+      POSTGRES_PASSWORD: bc-password
+      POSTGRES_DB: bc
+
+networks:
+  bc-network:
+    driver: bridge
