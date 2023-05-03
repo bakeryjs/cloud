@@ -16,6 +16,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] ALLOW_LIST = {
+            // Swagger UI and Docks
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui/**",
+            "/webjars/**",
+            // AuthController
+            "/auth/**",
+    };
+
     private final PasswordEncoder passwordEncoder;
     private final JwtFilter jwtFilter;
     private final AuthService authService;
@@ -34,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers(ALLOW_LIST).permitAll()
                 .and()
                 .authorizeRequests()
                 .anyRequest().authenticated();
