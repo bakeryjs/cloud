@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -25,8 +26,10 @@ func (c *Client) Create(options CreateOptions) (string, error) {
 		return "", err
 	}
 	config := &container.Config{
-		Image: options.Image,
-		Tty:   true,
+		Image:        options.Image,
+		Tty:          true,
+		OpenStdin:    true,
+		ExposedPorts: utils.PortArrayToPortSet(options.Ports),
 	}
 	hostConfig := &container.HostConfig{
 		PortBindings: utils.PortArrayToPortMap(options.Ports),
@@ -44,6 +47,11 @@ func (c *Client) Create(options CreateOptions) (string, error) {
 		return "", err
 	}
 	err = c.bindToNetwork(container.ID)
+	if err != nil {
+		fmt.Println(err) // TODO: log it
+	}
+	c.Start(container.ID)
+	err = c.configureSSH(container.ID)
 	if err != nil {
 		fmt.Println(err) // TODO: log it
 	}
@@ -154,6 +162,33 @@ func (c *Client) createNetwork() (*types.NetworkCreateResponse, error) {
 		return nil, err
 	}
 	return &network, err
+}
+
+func (c *Client) configureSSH(id string) error {
+	options := types.ContainerAttachOptions{
+		Stdin:  true,
+		Stream: true,
+	}
+	connection, err := c.cli.ContainerAttach(c.ctx, id, options)
+	if err != nil {
+		return err
+	}
+	commands := []string{
+		"apt update",
+		"apt install -y openssh-server",
+		"useradd -rm -d /home/user -s /bin/bash -g root -G sudo -u 1000 user",
+		"echo 'user:pass' | chpasswd",
+		"service ssh start",
+	}
+	input := []byte{}
+	input = fmt.Append(input, strings.Join(commands, ";"))
+	input = fmt.Append(input, "\n")
+	_, err = connection.Conn.Write(input)
+	if err != nil {
+		return err
+	}
+	connection.Conn.Close()
+	return nil
 }
 
 func NewClient() *Client {

@@ -37,10 +37,18 @@ func PortArrayToPortMap(portArray []string) nat.PortMap {
 		args := strings.Split(entry, ":")
 		result[nat.Port(args[0])] = []nat.PortBinding{
 			{
-				HostIP:   "0.0.0.0",
 				HostPort: args[1],
 			},
 		}
+	}
+	return result
+}
+
+func PortArrayToPortSet(portArray []string) nat.PortSet {
+	result := nat.PortSet{}
+	for _, entry := range portArray {
+		port := strings.Split(entry, ":")[0]
+		result[nat.Port(port)] = struct{}{}
 	}
 	return result
 }
