@@ -1,7 +1,7 @@
 package docker
 
 type CreateOptions struct {
-	Image string
-	Name  string
-	Ports []string
+	Image string   `json:"image"`
+	Name  string   `json:"name"`
+	Ports []string `json:"ports"`
 }
