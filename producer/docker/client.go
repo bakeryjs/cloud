@@ -71,7 +71,6 @@ func (c *Client) Stop(id string) error {
 func (c *Client) Delete(id string) error {
 	options := types.ContainerRemoveOptions{
 		RemoveVolumes: true,
-		RemoveLinks:   true,
 		Force:         true,
 	}
 	return c.cli.ContainerRemove(c.ctx, id, options)
@@ -97,7 +96,10 @@ func (c *Client) ReadOne(id string) (*Container, error) {
 }
 
 func (c *Client) ReadAll() (*[]Container, error) {
-	list, err := c.cli.ContainerList(c.ctx, types.ContainerListOptions{})
+	options := types.ContainerListOptions{
+		All: true,
+	}
+	list, err := c.cli.ContainerList(c.ctx, options)
 	if err != nil {
 		return nil, err
 	}

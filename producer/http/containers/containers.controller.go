@@ -21,7 +21,7 @@ func (cc *ContainersController) HandleRoutes(router *mux.Router) {
 	router.HandleFunc("/containers/create", cc.Create).Methods("POST")
 	router.HandleFunc("/containers/{containerId}/start", cc.Start).Methods("POST")
 	router.HandleFunc("/containers/{containerId}/stop", cc.Stop).Methods("POST")
-	router.HandleFunc("/containers/{containerId}/delete", cc.Stop).Methods("DELETE")
+	router.HandleFunc("/containers/{containerId}/delete", cc.Delete).Methods("DELETE")
 }
 
 func (cc *ContainersController) InfoAll(w http.ResponseWriter, r *http.Request) {
