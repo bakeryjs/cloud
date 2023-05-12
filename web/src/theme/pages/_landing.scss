@@ -1,0 +1,20 @@
+.landing {
+  .sign-controls a {
+    text-decoration: none;
+    &:hover {
+      color: lighten($dark, 10);
+    }
+  } 
+
+  .promotion-message {
+    padding-top: 280px;
+
+    a {
+      text-decoration: none;
+
+      &:hover {
+        color: lighten($dark, 10);
+      }
+    }
+  }
+}
