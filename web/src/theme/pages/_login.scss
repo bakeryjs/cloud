@@ -1,0 +1,39 @@
+.login {
+  .header-section {
+    margin-top: 100px;
+
+    a {
+      text-decoration: none;
+    }
+  }
+
+  .form-section {
+    margin-top: 40px;
+    margin-bottom: 60px;
+
+    .col {
+      padding-left: 60px;
+      padding-right: 60px;
+
+      .card-body {
+        padding-top: 30px;
+        padding-left: 25px;
+        padding-right: 25px;
+        padding-bottom: 30px;
+
+        form> :not(:first-child) {
+          margin-top: 20px;
+        }
+
+        form button {
+          width: 100%;
+        }
+      }
+
+      .card-footer {
+        padding: 15px;
+      }
+    }
+
+  }
+}

@@ -9,8 +9,6 @@ export default function Landing() {
           <Navbar.Brand href="#">Bakery Cloud</Navbar.Brand>
           <Navbar.Text className="sign-controls">
             <a href="/login">Sign In</a>
-            <span> / </span>
-            <a href="/login">Sign Up</a>
           </Navbar.Text>
         </Container>
       </Navbar>
@@ -23,6 +21,7 @@ export default function Landing() {
               <a className="link-dark" href="/dashboard">
                 now
               </a>
+              .
             </span>
           </Col>
         </Row>
