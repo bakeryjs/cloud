@@ -11,7 +11,7 @@ export const useAuth = (allowManage?: boolean) => {
     if (allowManage && !isAuth) {
       navigate("/login");
     }
-  });
+  }, [allowManage, isAuth, navigate]);
   const saveToken = (token: string) => {
     localStorage.setItem("token", token);
     setAuth(true);

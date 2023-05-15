@@ -4,16 +4,27 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 
-import { SignInModel, SignUpModel } from "./types";
+import { SignInModel, SignUpModel } from "../models";
+import { useAuth } from "../auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const { saveToken } = useAuth();
+  const navigate = useNavigate();
   const [formType, setFormType] = useState(true);
   const handleFormSwitch = (event: React.MouseEvent<HTMLElement>) => {
     event.preventDefault();
     setFormType(!formType);
   };
-  const handleSignIn = (model: SignInModel) => console.log(model); // TODO: send request
-  const handleSignUp = (model: SignUpModel) => console.log(model); // TODO: send request
+  const handleSignIn = (model: SignInModel) => {
+    // TODO: stub
+    saveToken("12345");
+    navigate("/dashboard");
+  };
+  const handleSignUp = (model: SignUpModel) => {
+    // TODO: stub
+    console.log(model);
+  }
   const form = formType ? (
     <SignIn onSubmit={handleSignIn} />
   ) : (

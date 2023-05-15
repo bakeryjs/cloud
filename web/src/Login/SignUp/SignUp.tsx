@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { SignUpModel } from "../types";
+import { SignUpModel } from "../../models";
 
 interface Props {
   onSubmit: (model: SignUpModel) => void;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { SignInModel } from "../types";
+import { SignInModel } from "../../models";
 
 interface Props {
   onSubmit: (dataModel: SignInModel) => void;
