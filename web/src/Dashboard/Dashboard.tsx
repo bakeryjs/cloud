@@ -10,8 +10,10 @@ import {
   Stack,
   Table,
 } from "react-bootstrap";
+import { useAuth } from "../auth";
 
 export default function Dashboard() {
+  useAuth(true);
   return (
     <div className="dashboard">
       <Navbar>

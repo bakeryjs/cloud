@@ -7,6 +7,7 @@ import SignUp from "./SignUp";
 import { SignInModel, SignUpModel } from "../models";
 import { useAuth } from "../auth";
 import { useNavigate } from "react-router-dom";
+import CONFIG from "../config";
 
 export default function Login() {
   const { saveToken } = useAuth();
@@ -16,15 +17,22 @@ export default function Login() {
     event.preventDefault();
     setFormType(!formType);
   };
-  const handleSignIn = (model: SignInModel) => {
-    // TODO: stub
-    saveToken("12345");
+  const handleSignIn = async (model: SignInModel) => {
+    const response = await fetch(`${CONFIG.HOST}/auth/signIn`, {
+      method: "POST",
+      body: JSON.stringify(model),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const token = await response.json();
+    saveToken(token);
     navigate("/dashboard");
   };
   const handleSignUp = (model: SignUpModel) => {
     // TODO: stub
     console.log(model);
-  }
+  };
   const form = formType ? (
     <SignIn onSubmit={handleSignIn} />
   ) : (
