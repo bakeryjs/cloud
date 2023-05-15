@@ -2,6 +2,7 @@ package com.bakery.skynet.controller;
 
 import com.bakery.skynet.dto.AuthSignInDto;
 import com.bakery.skynet.dto.AuthSignUpDto;
+import com.bakery.skynet.dto.JwtTokenDto;
 import com.bakery.skynet.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +25,7 @@ public class AuthController extends RootController {
     }
 
     @PostMapping("/signIn")
-    public String signIn(@Valid @RequestBody AuthSignInDto dto) {
+    public JwtTokenDto signIn(@Valid @RequestBody AuthSignInDto dto) {
         return authService.signIn(dto.toUser());
     }
 

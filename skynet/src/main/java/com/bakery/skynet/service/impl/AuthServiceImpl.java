@@ -1,5 +1,6 @@
 package com.bakery.skynet.service.impl;
 
+import com.bakery.skynet.dto.JwtTokenDto;
 import com.bakery.skynet.exception.InvalidCredentialsException;
 import com.bakery.skynet.exception.UserAlreadyExistsException;
 import com.bakery.skynet.model.User;
@@ -30,13 +31,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String signIn(User user) {
+    public JwtTokenDto signIn(User user) {
         User userDb = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(InvalidCredentialsException::commonMessage);
         if (!passwordEncoder.matches(user.getPassword(), userDb.getPassword())) {
             throw InvalidCredentialsException.commonMessage();
         }
-        return jwtUtil.generate(userDb.toSubject());
+        return JwtTokenDto.builder()
+                .token(jwtUtil.generate(userDb.toSubject()))
+                .build();
     }
 
     @Override
