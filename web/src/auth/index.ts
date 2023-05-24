@@ -2,10 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const useAuth = (allowManage?: boolean) => {
-  const getAuth = () => {
-    return !!localStorage.getItem("token");
-  };
-  const [isAuth, setAuth] = useState(getAuth());
+  const getToken = () => localStorage.getItem("token");
+  const [isAuth, setAuth] = useState(!!getToken());
   const navigate = useNavigate();
   useEffect(() => {
     if (allowManage && !isAuth) {
@@ -20,5 +18,5 @@ export const useAuth = (allowManage?: boolean) => {
     localStorage.setItem("token", "");
     navigate("/login");
   };
-  return { isAuth, saveToken, resetToken };
+  return { isAuth, getToken, saveToken, resetToken };
 };

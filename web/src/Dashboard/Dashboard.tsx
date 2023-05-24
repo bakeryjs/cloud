@@ -1,27 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
   CloseButton,
   Col,
   Container,
+  NavDropdown,
   Navbar,
   Row,
   Stack,
   Table,
 } from "react-bootstrap";
 import { useAuth } from "../auth";
+import { User } from "../models";
+import CONFIG from "../config";
+
+const DefaultUser: User = {};
 
 export default function Dashboard() {
-  useAuth(true);
+  const { getToken, resetToken } = useAuth(true);
+  const [user, setUser] = useState(DefaultUser);
+  const logout = () => resetToken();
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`${CONFIG.HOST}/users`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+      const user = await response.json();
+      setUser(user);
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className="dashboard">
       <Navbar>
         <Container>
           <Navbar.Brand href="#">Bakery Cloud</Navbar.Brand>
-          <Navbar.Text>
-            <span>John Doe</span>
-          </Navbar.Text>
+          <NavDropdown
+            className="dropdown-menu-left"
+            title={user.organization || user.fullName}
+          >
+            <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+          </NavDropdown>
         </Container>
       </Navbar>
       <Container className="table-container">

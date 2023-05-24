@@ -10,3 +10,10 @@ export interface SignUpModel {
   password: string;
   country?: string;
 }
+
+export interface User {
+  fullName?: string;
+  email?: string;
+  country?: string;
+  organization?: string;
+}
