@@ -18,7 +18,7 @@ public class AuthSignUpDto {
     private String password;
 
     private String country;
-    private String role;
+    private String organization;
 
     public User toUser() {
         return User.builder()
@@ -26,7 +26,7 @@ public class AuthSignUpDto {
                 .email(email)
                 .password(password)
                 .country(country)
-                .role(role)
+                .organization(organization)
                 .build();
     }
 

@@ -38,7 +38,7 @@ public class User implements UserDetails {
     private String country;
 
     @Column
-    private String role;
+    private String organization;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<PerformingServer> servers;

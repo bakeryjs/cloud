@@ -25,13 +25,23 @@ export default function Login() {
         "Content-Type": "application/json",
       },
     });
-    const token = await response.json();
-    saveToken(token);
+    const json = await response.json();
+    saveToken(json.token);
     navigate("/dashboard");
   };
-  const handleSignUp = (model: SignUpModel) => {
-    // TODO: stub
-    console.log(model);
+  const handleSignUp = async (model: SignUpModel) => {
+    const response = await fetch(`${CONFIG.HOST}/auth/signUp`, {
+      method: "POST",
+      body: JSON.stringify(model),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      alert("Something went wrong!");
+      return;
+    }
+    setFormType(true);
   };
   const form = formType ? (
     <SignIn onSubmit={handleSignIn} />
