@@ -1,6 +1,6 @@
 package com.bakery.skynet.service;
 
-import com.bakery.skynet.dto.JwtTokenDto;
+import com.bakery.skynet.dto.auth.JwtTokenDto;
 import com.bakery.skynet.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

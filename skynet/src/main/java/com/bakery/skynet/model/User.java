@@ -41,10 +41,7 @@ public class User implements UserDetails {
     private String organization;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<PerformingServer> servers;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Application> applications;
+    private List<Container> containers;
 
     public static User fromSubject(String subject) {
         String[] args = subject.split(SUBJECT_SEPARATOR);

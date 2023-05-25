@@ -32,7 +32,7 @@ export default function Dashboard() {
       const user = await response.json();
       setUser(user);
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className="dashboard">

@@ -1,4 +1,4 @@
-package com.bakery.skynet.dto;
+package com.bakery.skynet.dto.auth;
 
 import com.bakery.skynet.model.User;
 import lombok.Data;

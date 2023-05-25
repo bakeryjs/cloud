@@ -1,6 +1,6 @@
 package com.bakery.skynet.controller;
 
-import com.bakery.skynet.dto.UserDto;
+import com.bakery.skynet.dto.user.UserDto;
 import com.bakery.skynet.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

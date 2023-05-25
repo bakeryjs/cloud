@@ -1,6 +1,6 @@
 package com.bakery.skynet.service.impl;
 
-import com.bakery.skynet.dto.UserDto;
+import com.bakery.skynet.dto.user.UserDto;
 import com.bakery.skynet.model.User;
 import com.bakery.skynet.repository.UserRepository;
 import com.bakery.skynet.service.UserService;

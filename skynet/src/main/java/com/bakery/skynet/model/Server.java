@@ -1,25 +1,29 @@
 package com.bakery.skynet.model;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "performing_servers")
-public class PerformingServer {
+@Table(name = "servers")
+public class Server {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
-    private String identifier;
-
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
+
+    @Column(nullable = false, unique = true)
+    private String address;
 
     @Column(nullable = false)
     private String location;
@@ -28,14 +32,10 @@ public class PerformingServer {
     @Enumerated(EnumType.STRING)
     private State state;
 
-    @Column(name = "state_changed", nullable = false)
-    private Timestamp stateChanged;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "changed_at", nullable = false)
+    private Timestamp changedAt;
 
     @OneToMany(mappedBy = "server", cascade = CascadeType.REMOVE)
-    private List<PerformingServerLog> logs;
+    private List<Container> containers;
 
 }

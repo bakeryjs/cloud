@@ -1,6 +1,6 @@
 package com.bakery.skynet.service.impl;
 
-import com.bakery.skynet.dto.JwtTokenDto;
+import com.bakery.skynet.dto.auth.JwtTokenDto;
 import com.bakery.skynet.exception.InvalidCredentialsException;
 import com.bakery.skynet.exception.UserAlreadyExistsException;
 import com.bakery.skynet.model.User;
