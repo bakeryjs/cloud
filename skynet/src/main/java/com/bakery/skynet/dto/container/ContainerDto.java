@@ -10,6 +10,7 @@ public class ContainerDto {
 
     private String id;
     private String image;
+    private String name;
     private String status;
     private String changedAt;
     private String localNetworkGateway;

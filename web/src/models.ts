@@ -17,3 +17,18 @@ export interface User {
   country?: string;
   organization?: string;
 }
+
+export interface Container {
+  id?: string;
+  image?: string;
+  name?: string;
+  status?: string;
+  changedAt?: string;
+  localNetworkGateway?: string;
+  localNetworkIP?: string;
+  ports?: string[];
+  serverId?: number;
+  serverName?: string;
+  serverAddress?: string;
+  serverLocation?: string;
+}

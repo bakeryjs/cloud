@@ -14,6 +14,7 @@ public class ContainerServerDto {
 
     private String id;
     private String image;
+    private String name;
     private String status;
     private String changedAt;
     private String localNetworkGateway;
@@ -30,6 +31,7 @@ public class ContainerServerDto {
         return ContainerServerDto.builder()
                 .id(containerDto.getId())
                 .image(containerDto.getImage())
+                .name(containerDto.getName())
                 .status(containerDto.getStatus())
                 .changedAt(containerDto.getChangedAt())
                 .localNetworkGateway(containerDto.getLocalNetworkGateway())

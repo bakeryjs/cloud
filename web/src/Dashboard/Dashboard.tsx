@@ -1,52 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Button,
   Card,
   CloseButton,
   Col,
   Container,
-  NavDropdown,
-  Navbar,
   Row,
   Stack,
-  Table,
 } from "react-bootstrap";
 import { useAuth } from "../auth";
-import { User } from "../models";
-import CONFIG from "../config";
-
-const DefaultUser: User = {};
+import ContainersTable from "./ContainersTable";
+import UserNavbar from "./UserNavbar";
 
 export default function Dashboard() {
-  const { getToken, resetToken } = useAuth(true);
-  const [user, setUser] = useState(DefaultUser);
-  const logout = () => resetToken();
-  useEffect(() => {
-    (async () => {
-      const response = await fetch(`${CONFIG.HOST}/users`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${getToken()}`,
-        },
-      });
-      const user = await response.json();
-      setUser(user);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useAuth(true);
   return (
     <div className="dashboard">
-      <Navbar>
-        <Container>
-          <Navbar.Brand href="#">Bakery Cloud</Navbar.Brand>
-          <NavDropdown
-            className="dropdown-menu-left"
-            title={user.organization || user.fullName}
-          >
-            <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
-          </NavDropdown>
-        </Container>
-      </Navbar>
+      <UserNavbar />
       <Container className="table-container">
         <Row>
           <Col>
@@ -58,36 +28,7 @@ export default function Dashboard() {
         </Row>
         <Row>
           <Col>
-            <Table hover={true} striped={true}>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Identifier</th>
-                  <th>Server</th>
-                  <th>State</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>My Server</td>
-                  <td>4gylo1qfe83</td>
-                  <td>BC-US</td>
-                  <td>Stopped</td>
-                </tr>
-                <tr>
-                  <td>My Server</td>
-                  <td>4gylo1qfe83</td>
-                  <td>BC-US</td>
-                  <td>Stopped</td>
-                </tr>
-                <tr>
-                  <td>My Server</td>
-                  <td>4gylo1qfe83</td>
-                  <td>BC-US</td>
-                  <td>Stopped</td>
-                </tr>
-              </tbody>
-            </Table>
+            <ContainersTable />
           </Col>
         </Row>
         <Row className="info-row">
@@ -105,7 +46,7 @@ export default function Dashboard() {
                       <span>4gylo1qfe83</span>
                     </Stack>
                     <Stack>
-                      <span>Network address</span>
+                      <span className="text-muted">Network address</span>
                       <span>98.243.190.201</span>
                     </Stack>
                   </Stack>
