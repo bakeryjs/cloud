@@ -1,6 +1,6 @@
 package docker
 
-type CreateOptions struct {
+type ContainerCreateDto struct {
 	Image string   `json:"image"`
 	Name  string   `json:"name"`
 	Ports []string `json:"ports"`

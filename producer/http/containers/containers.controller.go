@@ -16,12 +16,12 @@ type ContainersController struct {
 }
 
 func (cc *ContainersController) HandleRoutes(router *mux.Router) {
-	router.HandleFunc("/containers/info", cc.InfoAll).Methods("GET")
-	router.HandleFunc("/containers/{containerId}/info", cc.Info).Methods("GET")
-	router.HandleFunc("/containers/create", cc.Create).Methods("POST")
+	router.HandleFunc("/containers", cc.InfoAll).Methods("GET")
+	router.HandleFunc("/containers/{containerId}", cc.Info).Methods("GET")
+	router.HandleFunc("/containers", cc.Create).Methods("POST")
 	router.HandleFunc("/containers/{containerId}/start", cc.Start).Methods("POST")
 	router.HandleFunc("/containers/{containerId}/stop", cc.Stop).Methods("POST")
-	router.HandleFunc("/containers/{containerId}/delete", cc.Delete).Methods("DELETE")
+	router.HandleFunc("/containers/{containerId}", cc.Delete).Methods("DELETE")
 }
 
 func (cc *ContainersController) InfoAll(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +45,7 @@ func (cc *ContainersController) Info(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cc *ContainersController) Create(w http.ResponseWriter, r *http.Request) {
-	var options docker.CreateOptions
+	var options docker.ContainerCreateDto
 	err := json.NewDecoder(r.Body).Decode(&options)
 	if err != nil {
 		httpUtils.Respond(w, http.StatusBadRequest, fail.InvalidRequestBody)

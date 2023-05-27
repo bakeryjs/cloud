@@ -18,7 +18,7 @@ public class ServerController extends RootController {
 
     private final ServerService serverService;
 
-    @GetMapping()
+    @GetMapping
     public List<ServerDto> getAll() {
         return serverService.getAll();
     }
@@ -28,7 +28,7 @@ public class ServerController extends RootController {
         return serverService.getOne(id);
     }
 
-    @PostMapping()
+    @PostMapping
     public ServerDto create(@Valid @RequestBody ServerCreateDto dto) {
         return serverService.create(dto);
     }

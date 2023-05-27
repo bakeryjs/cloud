@@ -29,4 +29,15 @@ public class ServerDto {
                 .build();
     }
 
+    public Server toServer() {
+        return Server.builder()
+                .id(id)
+                .name(name)
+                .address(address)
+                .location(location)
+                .state(state)
+                .changedAt(changedAt)
+                .build();
+    }
+
 }

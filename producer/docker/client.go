@@ -20,19 +20,19 @@ type Client struct {
 	cli *client.Client
 }
 
-func (c *Client) Create(options CreateOptions) (string, error) {
-	err := c.pull(options.Image)
+func (c *Client) Create(dto ContainerCreateDto) (*Container, error) {
+	err := c.pull(dto.Image)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	config := &container.Config{
-		Image:        options.Image,
+		Image:        dto.Image,
 		Tty:          true,
 		OpenStdin:    true,
-		ExposedPorts: utils.PortArrayToPortSet(options.Ports),
+		ExposedPorts: utils.PortArrayToPortSet(dto.Ports),
 	}
 	hostConfig := &container.HostConfig{
-		PortBindings: utils.PortArrayToPortMap(options.Ports),
+		PortBindings: utils.PortArrayToPortMap(dto.Ports),
 	}
 	networkingConfig := &network.NetworkingConfig{}
 	container, err := c.cli.ContainerCreate(
@@ -41,10 +41,10 @@ func (c *Client) Create(options CreateOptions) (string, error) {
 		hostConfig,
 		networkingConfig,
 		nil,
-		options.Name,
+		dto.Name,
 	)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	err = c.bindToNetwork(container.ID)
 	if err != nil {
@@ -55,7 +55,7 @@ func (c *Client) Create(options CreateOptions) (string, error) {
 	if err != nil {
 		fmt.Println(err) // TODO: log it
 	}
-	return container.ID, nil
+	return c.ReadOne(container.ID)
 }
 
 func (c *Client) Start(id string) error {
