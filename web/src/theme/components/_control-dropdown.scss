@@ -1,0 +1,9 @@
+.control-dropdown {
+  .dropdown-toggle {
+    border: 0;
+
+    &::after {
+      display: none !important;
+    }
+  }
+}
