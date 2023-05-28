@@ -6,9 +6,10 @@ import { useFetch } from "../../http";
 
 interface Props {
   updateTrigger: number;
+  onSelect: (id: string) => void;
 }
 
-export default function ContainersTable({ updateTrigger }: Props) {
+export default function ContainersTable({ updateTrigger, onSelect }: Props) {
   const { request } = useFetch();
   const [containers, setContainers] = useState([] as Container[]);
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function ContainersTable({ updateTrigger }: Props) {
       </thead>
       <tbody>
         {containers.map((container) => (
-          <tr key={container.id}>
+          <tr key={container.id} onClick={() => onSelect(container.id!)}>
             <td>{container.name}</td>
             <td>{container.id?.substring(0, 12)}</td>
             <td>{container.serverName}</td>
