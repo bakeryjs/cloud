@@ -64,7 +64,7 @@ public class ContainerServiceImpl implements ContainerService {
     public ContainerServerDto getOne(String id) {
         Container container = findOne(id);
         String url = String.format(
-                "%s:%s/containers/%s",
+                "http://%s:%s/containers/%s",
                 container.getServer().getAddress(),
                 PRODUCER_PORT,
                 container.getId());
@@ -84,7 +84,7 @@ public class ContainerServiceImpl implements ContainerService {
         ServerDto serverDto = serverService.getOne(serverId);
         HttpEntity<ContainerCreateDto> entity = new HttpEntity<>(dto);
         String url = String.format(
-                "%s:%s/containers",
+                "http://%s:%s/containers",
                 serverDto.getAddress(),
                 PRODUCER_PORT);
         ContainerDto containerDto = restTemplate.postForObject(url, entity, ContainerDto.class);
@@ -102,7 +102,7 @@ public class ContainerServiceImpl implements ContainerService {
     public void start(String id) {
         Container container = findOne(id);
         String url = String.format(
-                "%s:%s/containers/%s/start",
+                "http://%s:%s/containers/%s/start",
                 container.getServer().getAddress(),
                 PRODUCER_PORT,
                 container.getId());
@@ -113,7 +113,7 @@ public class ContainerServiceImpl implements ContainerService {
     public void stop(String id) {
         Container container = findOne(id);
         String url = String.format(
-                "%s:%s/containers/%s/stop",
+                "http://%s:%s/containers/%s/stop",
                 container.getServer().getAddress(),
                 PRODUCER_PORT,
                 container.getId());
@@ -125,7 +125,7 @@ public class ContainerServiceImpl implements ContainerService {
         Container container = findOne(id);
         containerRepository.delete(container);
         String url = String.format(
-                "%s:%s/containers/%s",
+                "http://%s:%s/containers/%s",
                 container.getServer().getAddress(),
                 PRODUCER_PORT,
                 container.getId());

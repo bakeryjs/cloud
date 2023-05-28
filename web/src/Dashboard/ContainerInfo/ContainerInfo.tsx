@@ -52,7 +52,7 @@ export default function ContainerInfo({ id, onClose }: Props) {
           <Stack gap={4}>
             <Stack>
               <span className="text-muted">Status</span>
-              <span>{container.status}</span>
+              <span>{container.status?.toUpperCase()}</span>
             </Stack>
             <Stack>
               <span className="text-muted">Local Network Gateway</span>
