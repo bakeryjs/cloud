@@ -4,17 +4,21 @@ import CONFIG from "../../config";
 import { Table } from "react-bootstrap";
 import { useFetch } from "../../http";
 
-export default function ContainersTable() {
+interface Props {
+  updateTrigger: number;
+}
+
+export default function ContainersTable({ updateTrigger }: Props) {
   const { request } = useFetch();
   const [containers, setContainers] = useState([] as Container[]);
   useEffect(() => {
     (async () => {
-      const resposne = await request(`${CONFIG.HOST}/containers`);
-      const containers = await resposne.json();
+      const response = await request(`${CONFIG.HOST}/containers`);
+      const containers = await response.json();
       setContainers(containers);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [updateTrigger]);
   return (
     <Table hover={true} striped={true}>
       <thead>

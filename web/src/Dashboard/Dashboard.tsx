@@ -1,18 +1,13 @@
-import React from "react";
-import {
-  Button,
-  Card,
-  CloseButton,
-  Col,
-  Container,
-  Row,
-  Stack,
-} from "react-bootstrap";
+import React, { useState } from "react";
+import { Card, CloseButton, Col, Container, Row, Stack } from "react-bootstrap";
 import { useAuth } from "../auth";
 import ContainersTable from "./ContainersTable";
 import UserNavbar from "./UserNavbar";
+import ContainerAddModal from "./ContainerAddModal/ContainerAddModal";
 
 export default function Dashboard() {
+  const [updateTrigger, setUpdateTrigger] = useState(0);
+  const onAdd = () => setUpdateTrigger(updateTrigger + 1);
   useAuth(true);
   return (
     <div className="dashboard">
@@ -23,12 +18,12 @@ export default function Dashboard() {
             <h3>Containers</h3>
           </Col>
           <Col className="text-end">
-            <Button variant="dark">Create</Button>
+            <ContainerAddModal onSubmit={onAdd} />
           </Col>
         </Row>
         <Row>
           <Col>
-            <ContainersTable />
+            <ContainersTable updateTrigger={updateTrigger} />
           </Col>
         </Row>
         <Row className="info-row">

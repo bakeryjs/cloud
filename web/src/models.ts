@@ -32,3 +32,15 @@ export interface Container {
   serverAddress?: string;
   serverLocation?: string;
 }
+
+export interface ContainerCreateDto {
+  name?: string;
+  image?: string;
+  ports?: string[];
+}
+
+export interface ServerDto {
+  id?: number;
+  name?: string;
+  location?: string;
+}

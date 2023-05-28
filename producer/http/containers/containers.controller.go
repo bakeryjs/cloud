@@ -38,8 +38,7 @@ func (cc *ContainersController) Info(w http.ResponseWriter, r *http.Request) {
 	containerId := vars["containerId"]
 	result, err := cc.dockerClient.ReadOne(containerId)
 	if err != nil {
-		httpUtils.Respond(w, http.StatusBadRequest, err)
-		return
+		log.Println(err)
 	}
 	httpUtils.Respond(w, http.StatusOK, result)
 }

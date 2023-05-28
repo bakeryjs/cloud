@@ -11,6 +11,7 @@ import com.bakery.skynet.repository.ContainerRepository;
 import com.bakery.skynet.service.ContainerService;
 import com.bakery.skynet.service.ServerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ContainerServiceImpl implements ContainerService {
 
     private static final String PRODUCER_PORT = "9092";
@@ -46,7 +48,9 @@ public class ContainerServiceImpl implements ContainerService {
         List<Container> containers = containerRepository.findAllByUserUuid(user.getUuid());
         for (Container entry : containers) {
             ContainerServerDto containerDto = getOne(entry.getId());
-            result.add(containerDto);
+            if (containerDto != null) {
+                result.add(containerDto);
+            }
         }
         return result;
     }
@@ -66,7 +70,9 @@ public class ContainerServiceImpl implements ContainerService {
                 container.getId());
         ContainerDto containerDto = restTemplate.getForObject(url, ContainerDto.class);
         if (containerDto == null) {
-            throw new EntityNotFoundException("container with id " + id + " not found on its server");
+            log.warn("container with id " + id + " not found on its server, removing it from database");
+            containerRepository.delete(container);
+            return null;
         }
         return ContainerServerDto.from(containerDto, ServerDto.from(container.getServer()));
     }
