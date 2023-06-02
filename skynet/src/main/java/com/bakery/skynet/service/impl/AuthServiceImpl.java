@@ -3,6 +3,7 @@ package com.bakery.skynet.service.impl;
 import com.bakery.skynet.dto.auth.JwtTokenDto;
 import com.bakery.skynet.exception.InvalidCredentialsException;
 import com.bakery.skynet.exception.UserAlreadyExistsException;
+import com.bakery.skynet.model.Role;
 import com.bakery.skynet.model.User;
 import com.bakery.skynet.repository.UserRepository;
 import com.bakery.skynet.security.JwtUtil;
@@ -27,6 +28,7 @@ public class AuthServiceImpl implements AuthService {
             throw UserAlreadyExistsException.commonMessage(user.getEmail());
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.USER);
         userRepository.save(user);
     }
 

@@ -1,8 +1,10 @@
 package com.bakery.skynet.security;
 
 import com.bakery.skynet.model.User;
+import com.bakery.skynet.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -22,6 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_TYPE = "Bearer";
     private static final String AUTHORIZATION_SEPARATOR = " ";
 
+    private final AuthService authService;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -36,8 +40,10 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
         User user = User.fromSubject(jwtUtil.parse(token));
+        List<GrantedAuthority> authorities = (List<GrantedAuthority>) authService
+                .loadUserByUsername(user.getUsername()).getAuthorities();
         UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(user, null, null);
+                new UsernamePasswordAuthenticationToken(user, null, authorities);
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);

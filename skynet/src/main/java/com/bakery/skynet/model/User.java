@@ -2,9 +2,11 @@ package com.bakery.skynet.model;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -40,6 +42,9 @@ public class User implements UserDetails {
     @Column
     private String organization;
 
+    @Column(nullable = false)
+    private Role role;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Container> containers;
 
@@ -57,7 +62,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role.getName()));
+        return authorities;
     }
 
     @Override

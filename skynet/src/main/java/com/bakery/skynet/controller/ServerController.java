@@ -5,6 +5,7 @@ import com.bakery.skynet.dto.server.ServerDto;
 import com.bakery.skynet.dto.server.ServerUpdateDto;
 import com.bakery.skynet.service.ServerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,11 +30,13 @@ public class ServerController extends RootController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ServerDto create(@Valid @RequestBody ServerCreateDto dto) {
         return serverService.create(dto);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ServerDto update(
             @NotBlank @PathVariable long id,
             @Valid @RequestBody ServerUpdateDto dto) {
@@ -41,6 +44,7 @@ public class ServerController extends RootController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void delete(@NotBlank @PathVariable long id) {
         serverService.delete(id);
     }
