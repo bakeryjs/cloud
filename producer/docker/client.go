@@ -1,7 +1,7 @@
 package docker
 
 import (
-	"bakery/cloud/producer/utils"
+	"bakery/cloud/producer/docker/utils"
 	"context"
 	"fmt"
 	"io"
@@ -46,12 +46,12 @@ func (c *Client) Create(dto ContainerCreateDto) (*Container, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = c.bindToNetwork(container.ID)
+	err = c.bindToNetwork(container.ID, dto.Network)
 	if err != nil {
 		fmt.Println(err) // TODO: log it
 	}
-	c.Start(container.ID)
-	err = c.configureSSH(container.ID)
+	c.cli.ContainerStart(c.ctx, container.ID, types.ContainerStartOptions{})
+	err = c.initSystem(container.ID, dto.Username, dto.Password)
 	if err != nil {
 		fmt.Println(err) // TODO: log it
 	}
@@ -60,7 +60,11 @@ func (c *Client) Create(dto ContainerCreateDto) (*Container, error) {
 
 func (c *Client) Start(id string) error {
 	options := types.ContainerStartOptions{}
-	return c.cli.ContainerStart(c.ctx, id, options)
+	err := c.cli.ContainerStart(c.ctx, id, options)
+	if err != nil {
+		return err
+	}
+	return c.startSSH(id)
 }
 
 func (c *Client) Stop(id string) error {
@@ -130,8 +134,8 @@ func (c *Client) pull(image string) error {
 	return nil
 }
 
-func (c *Client) bindToNetwork(id string) error {
-	networkId, err := c.getNetworkId()
+func (c *Client) bindToNetwork(id string, name string) error {
+	networkId, err := c.getNetworkId(name)
 	if err != nil {
 		return err
 	}
@@ -139,34 +143,52 @@ func (c *Client) bindToNetwork(id string) error {
 	return c.cli.NetworkConnect(c.ctx, networkId, id, &config)
 }
 
-func (c *Client) getNetworkId() (string, error) {
+func (c *Client) getNetworkId(name string) (string, error) {
 	options := types.NetworkListOptions{}
 	list, err := c.cli.NetworkList(c.ctx, options)
 	if err != nil {
 		return "", err
 	}
 	for _, network := range list {
-		if network.Name == COMMON_NETWORK {
+		if network.Name == name {
 			return network.ID, nil
 		}
 	}
-	network, err := c.createNetwork()
+	network, err := c.createNetwork(name)
 	if err != nil {
 		return "", nil
 	}
 	return network.ID, nil
 }
 
-func (c *Client) createNetwork() (*types.NetworkCreateResponse, error) {
+func (c *Client) createNetwork(name string) (*types.NetworkCreateResponse, error) {
 	options := types.NetworkCreate{}
-	network, err := c.cli.NetworkCreate(c.ctx, COMMON_NETWORK, options)
+	network, err := c.cli.NetworkCreate(c.ctx, name, options)
 	if err != nil {
 		return nil, err
 	}
 	return &network, err
 }
 
-func (c *Client) configureSSH(id string) error {
+func (c *Client) initSystem(id string, username string, password string) error {
+	commands := []string{
+		"apt update",
+		"apt install -y openssh-server sudo",
+		"useradd -rm -d /home/" + username + " -s /bin/bash -g root -G sudo -u 1000 " + username,
+		"echo '" + username + ":" + password + "' | chpasswd",
+		"service ssh start",
+	}
+	return c.execute(id, commands)
+}
+
+func (c *Client) startSSH(id string) error {
+	commands := []string{
+		"service ssh start",
+	}
+	return c.execute(id, commands)
+}
+
+func (c *Client) execute(id string, commands []string) error {
 	options := types.ContainerAttachOptions{
 		Stdin:  true,
 		Stream: true,
@@ -174,13 +196,6 @@ func (c *Client) configureSSH(id string) error {
 	connection, err := c.cli.ContainerAttach(c.ctx, id, options)
 	if err != nil {
 		return err
-	}
-	commands := []string{
-		"apt update",
-		"apt install -y openssh-server",
-		"useradd -rm -d /home/user -s /bin/bash -g root -G sudo -u 1000 user",
-		"echo 'user:pass' | chpasswd",
-		"service ssh start",
 	}
 	input := []byte{}
 	input = fmt.Append(input, strings.Join(commands, ";"))
