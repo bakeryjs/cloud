@@ -15,6 +15,14 @@ public class ContainerCreateDto {
     @NotBlank(message = "image cannot be empty")
     private String image;
 
+    private String network;
+
+    @NotBlank(message = "username cannot be empty")
+    private String username;
+
+    @NotBlank(message = "password cannot be empty")
+    private String password;
+
     @NotNull(message = "ports cannot be null")
     private List<String> ports;
 

@@ -82,6 +82,7 @@ public class ContainerServiceImpl implements ContainerService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         ServerDto serverDto = serverService.getOne(serverId);
+        dto.setNetwork(user.getUuid().toString().substring(0, 8));
         HttpEntity<ContainerCreateDto> entity = new HttpEntity<>(dto);
         String url = String.format(
                 "http://%s:%s/containers",
