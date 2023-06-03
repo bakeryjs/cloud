@@ -36,6 +36,8 @@ export interface Container {
 export interface ContainerCreateDto {
   name?: string;
   image?: string;
+  username?: string;
+  password?: string;
   ports?: string[];
 }
 

@@ -5,10 +5,11 @@ import { Button, Form } from "react-bootstrap";
 
 interface Props {
   port: string;
+  disabled?: boolean;
   onRemove: (port: string) => void;
 }
 
-export default function PortRow({ port, onRemove }: Props) {
+export default function PortRow({ port, disabled, onRemove }: Props) {
   const [container, host] = port.split(":");
   const handleRemoveClick = () => onRemove(port);
   return (
@@ -20,7 +21,7 @@ export default function PortRow({ port, onRemove }: Props) {
         <Form.Control value={host} disabled={true} />
       </td>
       <td>
-        <Button variant="outline-dark" onClick={handleRemoveClick}>
+        <Button disabled={disabled} variant="outline-dark" onClick={handleRemoveClick}>
           <FontAwesomeIcon icon={faTrash} />
         </Button>
       </td>

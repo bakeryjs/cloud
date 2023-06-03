@@ -5,6 +5,7 @@ import NewPortRow from "./NewPortRow/NewPortRow";
 import PortRow from "./PortRow";
 import { useFetch } from "../../http";
 import CONFIG from "../../config";
+import { getRandomPort } from "./utils";
 
 interface Props {
   onSubmit: () => void;
@@ -24,7 +25,10 @@ export default function ContainerAddModal({ onSubmit }: Props) {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const handleOpen = () => setShow(true);
+  const handleOpen = () => {
+    setShow(true);
+    setDataModel({ ports: [`22:${getRandomPort()}`] });
+  };
   const handleClose = () => setShow(false);
   const handleSubmit = async () => {
     const response = await request(
@@ -86,6 +90,24 @@ export default function ContainerAddModal({ onSubmit }: Props) {
               />
             </Form.Group>
             <Form.Group>
+              <Form.Label>Username</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Username"
+                name="username"
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                name="password"
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Form.Group>
               <Form.Label>Server</Form.Label>
               <Form.Select
                 name="server"
@@ -102,15 +124,22 @@ export default function ContainerAddModal({ onSubmit }: Props) {
             <Form.Group>
               <Form.Label>Ports</Form.Label>
               <Table borderless>
+                <caption>
+                  Ports left: {3 - (dataModel.ports?.length || 0)}
+                </caption>
                 <tbody>
                   {dataModel.ports?.map((port, index) => (
                     <PortRow
                       key={index}
                       port={port}
+                      disabled={index === 0}
                       onRemove={handleRemovePortClick}
                     />
                   ))}
-                  <NewPortRow onAdd={handlePortAdd} />
+                  <NewPortRow
+                    hidden={dataModel.ports?.length === 3}
+                    onAdd={handlePortAdd}
+                  />
                 </tbody>
               </Table>
             </Form.Group>
