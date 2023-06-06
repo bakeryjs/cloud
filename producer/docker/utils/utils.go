@@ -2,11 +2,17 @@ package utils
 
 import (
 	"fmt"
+	"math/rand"
+	"net"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/docker/go-connections/nat"
 )
+
+const MIN_PORT = 4000
+const MAX_PORT = 24000
 
 func LatestTime(dates []string) string {
 	result := time.Date(1970, 1, 1, 0, 0, 0, 0, time.UTC).UnixMilli()
@@ -51,4 +57,32 @@ func PortArrayToPortSet(portArray []string) nat.PortSet {
 		result[nat.Port(port)] = struct{}{}
 	}
 	return result
+}
+
+func AssignPorts(ports []string) []string {
+	result := []string{}
+	for _, container := range ports {
+		host := GeneratePort()
+		result = append(result, fmt.Sprintf("%s:%s", container, host))
+	}
+	return result
+}
+
+func GeneratePort() string {
+	rand.Seed(time.Now().UnixNano())
+	port := strconv.Itoa(rand.Intn(MAX_PORT-MIN_PORT) + MIN_PORT)
+	if CheckIsPortAvailable(port) {
+		return port
+	} else {
+		return GeneratePort()
+	}
+}
+
+func CheckIsPortAvailable(port string) bool {
+	listener, err := net.Listen("tcp", ":"+port)
+	if err != nil {
+		return false
+	}
+	listener.Close()
+	return true
 }

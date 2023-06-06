@@ -5,7 +5,6 @@ import NewPortRow from "./NewPortRow/NewPortRow";
 import PortRow from "./PortRow";
 import { useFetch } from "../../http";
 import CONFIG from "../../config";
-import { getRandomPort } from "./utils";
 
 interface Props {
   onSubmit: () => void;
@@ -27,7 +26,7 @@ export default function ContainerAddModal({ onSubmit }: Props) {
   }, []);
   const handleOpen = () => {
     setShow(true);
-    setDataModel({ ports: [`22:${getRandomPort()}`] });
+    setDataModel({ ports: ["22"] });
   };
   const handleClose = () => setShow(false);
   const handleSubmit = async () => {
@@ -122,7 +121,7 @@ export default function ContainerAddModal({ onSubmit }: Props) {
               </Form.Select>
             </Form.Group>
             <Form.Group>
-              <Form.Label>Ports</Form.Label>
+              <Form.Label>Exposed ports</Form.Label>
               <Table borderless>
                 <caption>
                   Ports left: {3 - (dataModel.ports?.length || 0)}

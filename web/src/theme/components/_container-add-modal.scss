@@ -1,3 +1,18 @@
-.container-add-modal-form> :not(:first-child) {
-  margin-top: 20px;
+.container-add-modal-form {
+  &> :not(:first-child) {
+    margin-top: 20px;
+  }
+
+  table {
+    tr {
+      &> :first-child {
+        padding-left: 0;
+      }
+
+      &> :last-child {
+        width: 16px;
+        padding-right: 0;
+      }
+    }
+  }
 }

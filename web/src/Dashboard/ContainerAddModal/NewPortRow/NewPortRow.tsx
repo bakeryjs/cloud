@@ -1,8 +1,7 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { getRandomPort } from "../utils";
 
 interface Props {
   hidden?: boolean;
@@ -10,30 +9,19 @@ interface Props {
 }
 
 export default function NewPortRow({ hidden, onAdd }: Props) {
-  const [container, setContainer] = useState("");
-  const [host, setHost] = useState(getRandomPort().toString());
+  const [port, setPort] = useState("");
   const handleAddClick = () => {
-    onAdd(`${container}:${host}`);
-    setContainer("");
-    setHost(getRandomPort().toString());
+    onAdd(port);
+    setPort("");
   };
   return (
     <tr hidden={hidden}>
       <td>
         <Form.Control
           type="text"
-          placeholder="Container"
-          value={container}
-          onChange={(e) => setContainer(e.target.value)}
-        />
-      </td>
-      <td>
-        <Form.Control
-          disabled={true}
-          type="text"
-          placeholder="Host"
-          value={host}
-          onChange={(e) => setHost(e.target.value)}
+          placeholder="Port"
+          value={port}
+          onChange={(e) => setPort(e.target.value)}
         />
       </td>
       <td>

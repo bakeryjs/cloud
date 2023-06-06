@@ -13,14 +13,13 @@ import (
 	"github.com/docker/docker/client"
 )
 
-const COMMON_NETWORK = "bakery_producer_network"
-
 type Client struct {
 	ctx context.Context
 	cli *client.Client
 }
 
 func (c *Client) Create(dto ContainerCreateDto) (*Container, error) {
+	ports := utils.AssignPorts(dto.Ports)
 	err := c.pull(dto.Image)
 	if err != nil {
 		return nil, err
@@ -29,10 +28,10 @@ func (c *Client) Create(dto ContainerCreateDto) (*Container, error) {
 		Image:        dto.Image,
 		Tty:          true,
 		OpenStdin:    true,
-		ExposedPorts: utils.PortArrayToPortSet(dto.Ports),
+		ExposedPorts: utils.PortArrayToPortSet(ports),
 	}
 	hostConfig := &container.HostConfig{
-		PortBindings: utils.PortArrayToPortMap(dto.Ports),
+		PortBindings: utils.PortArrayToPortMap(ports),
 	}
 	networkingConfig := &network.NetworkingConfig{}
 	container, err := c.cli.ContainerCreate(
